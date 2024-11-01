@@ -14,6 +14,25 @@ namespace Bokningsapp___Grupp_7
         public bool HarWhiteboard { get; set; }
         public bool HarNödutgång { get; set; }
 
+        public Lokal(int nummer, int kapacitet, bool ärBokadNu, bool harWhiteboard, bool harNödutgång)
+        {
+            Nummer = nummer;
+            Kapacitet = kapacitet;
+            ÄrBokadNu = ärBokadNu;
+            HarWhiteboard = harWhiteboard;
+            HarNödutgång = harNödutgång;
+        }
+        public Lokal(int nummer, int kapacitet, bool harWhiteboard, bool harNödutgång)
+        {
+            Nummer = nummer;
+            Kapacitet = kapacitet;
+            HarWhiteboard = harWhiteboard;
+            HarNödutgång = harNödutgång;
+        }
+        public Lokal()
+        {
+
+        }
 
     }
 }

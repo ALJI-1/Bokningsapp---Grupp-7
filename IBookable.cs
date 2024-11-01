@@ -8,7 +8,7 @@ namespace Bokningsapp___Grupp_7
 {
     public interface IBookable
     {
-        public string Nummer { get; set; }
+        public int Nummer { get; set; }
         public int Kapacitet { get; set; }
 
         public void CancelBooking()
