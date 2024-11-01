@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
 {
-    public class Grupprum : Lokal , IBookable
+    public class Grupprum : Lokal 
     {
-        
+        public bool ÄrLjudisolerat { get; set; }
+        public bool HarTvSkärm { get; set; }
+
     }
 }

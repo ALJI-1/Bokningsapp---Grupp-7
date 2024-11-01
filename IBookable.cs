@@ -6,8 +6,29 @@ using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
 {
-    internal interface IBookable
+    public interface IBookable
     {
+        public string Nummer { get; set; }
+        public int Kapacitet { get; set; }
+
+        public void CancelBooking()
+        {
+
+        }
+        public void CreateBooking()
+        {
+
+        }
+        public void UpdateBooking()
+        {
+
+        }
+        public void DisplayBookings()
+        {
+
+        }   
+
 
     }
+    
 }
