@@ -3,6 +3,10 @@
     internal class Program
     {
         List <IBookable> bokningar = new List<IBookable>();
+
+        List <IBookable> lokaler = new List<IBookable>();
+
+
         static void Main(string[] args)
         {
             Program program = new();
