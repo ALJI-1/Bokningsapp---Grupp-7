@@ -8,27 +8,30 @@ namespace Bokningsapp___Grupp_7
 {
     public interface IBookable
     {
-        public int Nummer { get; set; }
+        public LokalTyp Typ { get; set; }
+        public int LokalNummer { get; set; }
         public int Kapacitet { get; set; }
 
-        public void CancelBooking()
+        
+        public void SkapaBokning()
         {
 
         }
-        public void CreateBooking()
+        public void AvbrytBokning()
         {
 
         }
-        public void UpdateBooking()
+        public void UppdateraBokning()
         {
 
         }
-        public void DisplayBookings()
+        public void VisaBookningar()
         {
 
-        }   
+        }
+        public void SkapaNyBokning ()
+        {
 
-
+        }
     }
-    
 }
