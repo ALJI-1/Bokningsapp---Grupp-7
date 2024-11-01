@@ -1,12 +1,14 @@
 ﻿namespace Bokningsapp___Grupp_7
 {
-    internal class Program
+    public class Program
     {
-        List <IBookable> bokningar = new List<IBookable>();
+        // Listor för att lagra bokningar och lokaler
+
+        List<IBookable> bokningar = new List<IBookable>();
 
         List <IBookable> lokaler = new List<IBookable>();
 
-
+        // Huvudmeyn för programmet. Lägg in metoder i switch-satsen för att anropa dem
         static void Main(string[] args)
         {
             Program program = new();
@@ -49,6 +51,7 @@
             }
         }
 
+        // Rör ej denna metod
         public void PrintMenu(String[] menuItems)
         {
             String topLeft = "╔";

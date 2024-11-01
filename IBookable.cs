@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
 {
-    public interface IBookable
+    // Interface. Alla andra klasser som implementerar detta interface måste implementera metoderna nedan och ha dessa properties
+    public interface IBookable 
     {
         public LokalTyp Typ { get; set; }
+        public String? BokadAv { get; set; }
         public int LokalNummer { get; set; }
         public int Kapacitet { get; set; }
 
-        
+
+        // Deklarerar metoder som ska implementeras i klasser som implementerar interfacet. Ingen logik här
         public void SkapaBokning()
         {
 
@@ -25,11 +28,11 @@ namespace Bokningsapp___Grupp_7
         {
 
         }
-        public void VisaBookningar()
+        public void VisaBokningar()
         {
 
         }
-        public void SkapaNyBokning ()
+        public void SkapaNyLokal ()
         {
 
         }
