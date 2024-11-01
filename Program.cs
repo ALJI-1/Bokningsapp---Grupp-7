@@ -2,9 +2,10 @@
 {
     internal class Program
     {
+        List <IBookable> bokningar = new List<IBookable>();
         static void Main(string[] args)
         {
-            Program program = new Program();
+            Program program = new();
             program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa ny lokal" });
 
             bool running = true;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
 {
-    public class Lokal
+    public class Lokal : IBookable
     {
 
     }
