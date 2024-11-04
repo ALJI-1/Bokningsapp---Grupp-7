@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Bokningsapp___Grupp_7
 {
     // Enum för att skilja på olika typer av lokaler när man skapar en ny lokal
-    public enum LokalTyp 
+    public enum LokalTyp
     {
         Grupprum,
         Sal
@@ -58,16 +58,115 @@ namespace Bokningsapp___Grupp_7
         {
 
         }
-        public void VisaLokaler() // Metod för att skriva ut information om alla lokaler
+        public void VisaLokaler(List<IBookable> lokaler) // Metod för att visa alla lokaler som finns
         {
+            if (lokaler.Count == 0) // Om det inte finns några lokaler
+            {
+                Console.WriteLine("Inga lokaler finns för tillfället.");
+                return;
+            }
 
+            foreach (var lokal in lokaler) // Loopar igenom alla lokaler och skriver ut information om dem
+            {
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine($"Typ av lokal: {lokal.Typ}");
+                Console.WriteLine($"Lokalnummer: {lokal.LokalNummer}");
+                Console.WriteLine($"Kapacitet: {lokal.Kapacitet}");
+
+                // Visa gemensamma egenskaper
+                if (((Lokal)lokal).HarWhiteboard == true)
+                {
+                    Console.WriteLine("Har whiteboard: Ja");
+                }
+                else
+                {
+                    Console.WriteLine("Har whiteboard: Nej");
+                }
+
+                if (((Lokal)lokal).HarNödutgång == true)
+                {
+                    Console.WriteLine("Har nödutgång: Ja");
+                }
+                else
+                {
+                    Console.WriteLine("Har nödutgång: Nej");
+                }
+
+                // Skiljer mellan Sal och Grupprum för att visa specifika egenskaper
+                if (lokal is Sal sal)
+                {
+                    if (((Sal)sal).HarWebkamera == true)
+                    {
+                        Console.WriteLine("Har webkamera: Ja");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Har webkamera: Nej");
+                    }
+
+                    if (((Sal)sal).HarBrandsläckare == true)
+                    {
+                        Console.WriteLine("Har brandsläckare: Ja");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Har brandsläckare: Nej");
+                    }
+                }
+                else if (lokal is Grupprum grupprum)
+                {
+                    if (((Grupprum)grupprum).ÄrLjudisolerat == true)
+                    {
+                        Console.WriteLine("Är ljudisolerat: Ja");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Är ljudisolerat: Nej");
+                    }
+
+                    if (((Grupprum)grupprum).HarTvSkärm == true)
+                    {
+                        Console.WriteLine("Har TV-skärm: Ja");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Har TV-skärm: Nej");
+                    }
+                }
+
+                Console.WriteLine("-------------------------------------------------");
+              
+            }
+            ClearConsole();
         }
-        public void SkapaNyLokal() // Metod för att skapa en ny lokal
-        {
 
+        public object SkapaNyLokal() // Metod för att skapa en ny lokal
+        {
+            Console.WriteLine("Vilken typ ska skapas?\n1: Sal\n2: Grupprum");
+            string? input = Console.ReadLine();
+
+            return input switch
+            {
+                "1" => Sal.SkapaNySal(), // Om användaren väljer 1 så anropas metoden SkapaNySal i klassen Sal
+                "2" => Grupprum.SkapaNyttGrupprum(), // Om användaren väljer 2 så anropas metoden SkapaNyttGrupprum i klassen Grupprum
+                _ => throw new ArgumentException("Felaktig inmatning. Ange 1 för Sal eller 2 för Grupprum")
+            };
+        }
+
+        public static bool BoolFråga(string fråga)  //Hjälpmetod för att ställa en fråga som kräver ett ja/nej-svar
+        {
+            Console.Write(fråga + " ");
+            string? svar = Console.ReadLine(); // Läser in svaret från användaren
+            return svar?.ToLower() == "ja"; // Returnerar true om svaret är "ja" och false om svaret är "nej"
+        }
+
+        public static void ClearConsole() //Metod för att rensa konsolen. Metoden används på flera ställen i programmet för att förbättra användarvänligheten.
+        {
+            Console.WriteLine("\nTryck ENTER för att gå vidare.");
+            Console.ReadLine();
+            Console.Clear();
         }
 
         // Fler metoder kan läggas till här om det behövs
-
     }
 }

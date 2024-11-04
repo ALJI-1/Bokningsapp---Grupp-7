@@ -4,23 +4,27 @@
     {
         // Listor för att lagra bokningar och lokaler
 
-        List<IBookable> bokningar = new List<IBookable>();
+        public static List<IBookable> bokningar = new List<IBookable>();
 
-        List <IBookable> lokaler = new List<IBookable>();
+        public static List <IBookable> lokaler = new List<IBookable>();
 
         // Huvudmeyn för programmet. Lägg in metoder i switch-satsen för att anropa dem
         static void Main(string[] args)
         {
-            Program program = new();
-            program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa ny lokal" });
+            IBookable sal1 = new Sal(1, 10, true, true, true, true);
+            IBookable grupprum1 = new Grupprum(2, 5, true, true, true, true);
+            lokaler.Add(sal1);
+            lokaler.Add(grupprum1);
+
 
             bool running = true;
-
             while (running)
             {
+                Program program = new();
+                program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa ny lokal" });
                 Console.Write("Välj ett alternativ: ");
-                string input = Console.ReadLine();
-
+                string? input = Console.ReadLine();
+                Lokal lokal = new Lokal();
                 switch (input)
                 {
                     case "1":
@@ -36,10 +40,10 @@
                         Console.WriteLine("Uppdatera bokning");
                         break;
                     case "5":
-                        Console.WriteLine("Visa lokaler");
+                        lokal.VisaLokaler(lokaler);
                         break;
                     case "6":
-                        Console.WriteLine("Skapa ny lokal");
+                        lokal.SkapaNyLokal();
                         break;
                     case "0":
                         running = false;
