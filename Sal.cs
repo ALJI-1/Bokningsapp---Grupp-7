@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
@@ -79,6 +80,8 @@ namespace Bokningsapp___Grupp_7
             Sal nySal = new Sal(salNr, salKapacitet, harWhiteboard, harNödutgång, harWebkamera, harBrandsläckare); // Skapar en ny sal
             Program.lokaler.Add(nySal); // Lägger till salen i listan lokaler
             Console.WriteLine("En ny sal har skapats.");
+            string sparadeLokaler = JsonSerializer.Serialize(Program.lokaler);
+            File.WriteAllText("lokaler.json", sparadeLokaler);
             ClearConsole(); // Rensar konsollen
             return nySal; // Behövs denna?
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
@@ -33,7 +34,7 @@ namespace Bokningsapp___Grupp_7
                     Console.WriteLine("Felaktig inmatning. Ange ett giltigt rumnummer");
                     inputRumNr = Console.ReadLine();
                 }
-                if (rumNr < 1 || rumNr > 100) // Kollar om rumnumret är mellan 1 och 100
+                if (rumNr < 1 || rumNr > 100) // Kollar om rumsnumret är mellan 1 och 100
                 {
                     Console.WriteLine("Rumnumret måste vara mellan 1 och 100");
                     inputRumNr = Console.ReadLine();
@@ -78,6 +79,8 @@ namespace Bokningsapp___Grupp_7
             Grupprum nyttRum = new Grupprum(rumNr, rumKapacitet, harWhiteboard, harNödutgång, ärLjudisolerat, harTvSkärm); // Skapar en ny instans av Grupprum
             Program.lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
             Console.WriteLine("Ett nytt grupprum har skapats.");
+            string sparadeLokaler = JsonSerializer.Serialize(Program.lokaler);
+            File.WriteAllText("lokaler.json", sparadeLokaler);
             ClearConsole(); // Rensar konsollen
             return nyttRum; // Behövs denna returnering?
         }

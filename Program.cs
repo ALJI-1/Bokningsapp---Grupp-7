@@ -1,21 +1,33 @@
-﻿namespace Bokningsapp___Grupp_7
+﻿using System.Text.Json;
+
+namespace Bokningsapp___Grupp_7
 {
     public class Program
     {
+
         // Listor för att lagra bokningar och lokaler
 
-        public static List<IBookable> bokningar = new List<IBookable>();
+        public static List<Lokal> bokningar = new List<Lokal>();
 
-        public static List <IBookable> lokaler = new List<IBookable>();
+        public static List <Lokal> lokaler = new List<Lokal>();
 
         // Huvudmeyn för programmet. Lägg in metoder i switch-satsen för att anropa dem
         static void Main(string[] args)
         {
-            IBookable sal1 = new Sal(1, 10, true, true, true, true);
-            IBookable grupprum1 = new Grupprum(2, 5, true, true, true, true);
-            lokaler.Add(sal1);
-            lokaler.Add(grupprum1);
+            string laddadeLokaler = File.ReadAllText("lokaler.json");
+            lokaler = JsonSerializer.Deserialize<List<Lokal>>(laddadeLokaler);
 
+            string sparadeBokningar = JsonSerializer.Serialize(bokningar);
+            File.WriteAllText("bokningar.json", sparadeBokningar);
+
+            string laddadeBokningar = File.ReadAllText("bokningar.json");
+            bokningar = JsonSerializer.Deserialize<List<Lokal>>(laddadeBokningar);
+
+
+            //Lokal sal1 = new Sal(1, 10, true, true, true, true);
+            //Lokal grupprum1 = new Grupprum(2, 5, true, true, true, true);
+            //lokaler.Add(sal1);
+            //lokaler.Add(grupprum1);
 
             bool running = true;
             while (running)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Bokningsapp___Grupp_7
@@ -42,23 +43,56 @@ namespace Bokningsapp___Grupp_7
 
         // ---------- Metoder som ska implementeras från interfacet IBookable ----------
 
-        public void SkapaBokning() // Metod för att skapa en bokning  
+        public void SkapaBokning() // Metod för att skapa en bokning  //AZAT
         {
 
         }
-        public void AvbrytBokning() // Metod för att avboka en bokning som redan finns
+        public void AvbrytBokning(string bokare) // Metod för att avboka en bokning som redan finns //RASHIID
         {
+            var bokning = Program.bokningar.Find(b => b.BokadAv == bokare);
+            if (bokning != null)
+            {
+                Program.bokningar.Remove(bokning);
+                Console.WriteLine("avbrytBokning");
+            }
+            else
+            {
+                Console.WriteLine("bokning hittes inte ");
+            }
 
         }
-        public void UppdateraBokning() // Metod för att uppdatera en bokning (exempelvis byta tid, byta lokal osv.)
+        public void UppdateraBokning() // Metod för att uppdatera en bokning (exempelvis byta tid, byta lokal osv.) //RASHIID & CHRISTOFFER
         {
+            Console.WriteLine("Uppdatera bokning");
+            Console.WriteLine("Ange namnet du bokade i: ");
+            string? bokadAv = Console.ReadLine();
+            var bokning = Program.bokningar.Find(b => b.BokadAv == bokadAv);
+            if (bokning != null)
+            {
+                Console.WriteLine("Bokning hittad");
+                Console.WriteLine("Ange ny starttid (yyyy-MM-dd HH:mm): ");
+                string? nyStartTid = Console.ReadLine();
 
+                Console.WriteLine("Ange ny varaktighet (timmar): ");
+                string? nyPeriod = Console.ReadLine();
+                StartTid = DateTime.Parse(nyStartTid);
+                Period = TimeSpan.FromHours(double.Parse(nyPeriod));
+
+                Console.WriteLine("Bokning uppdaterad");
+                string sparadeBokningar = JsonSerializer.Serialize(Program.bokningar);
+                File.WriteAllText("bokningar.json", sparadeBokningar);
+            }
+            else
+            {
+                Console.WriteLine("Bokning hittades inte");
+            }
         }
+
         public void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit
         {
 
         }
-        public void VisaLokaler(List<IBookable> lokaler) // Metod för att visa alla lokaler som finns
+        public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // CHRISTOFFER
         {
             if (lokaler.Count == 0) // Om det inte finns några lokaler
             {
@@ -140,7 +174,7 @@ namespace Bokningsapp___Grupp_7
             ClearConsole();
         }
 
-        public object SkapaNyLokal() // Metod för att skapa en ny lokal
+        public object SkapaNyLokal() // Metod för att skapa en ny lokal //CHRISTOFFER
         {
             Console.WriteLine("Vilken typ ska skapas?\n1: Sal\n2: Grupprum");
             string? input = Console.ReadLine();
@@ -153,14 +187,14 @@ namespace Bokningsapp___Grupp_7
             };
         }
 
-        public static bool BoolFråga(string fråga)  //Hjälpmetod för att ställa en fråga som kräver ett ja/nej-svar
+        public static bool BoolFråga(string fråga)  //Hjälpmetod för att ställa en fråga som kräver ett ja/nej-svar //CHRISTOFFER
         {
             Console.Write(fråga + " ");
             string? svar = Console.ReadLine(); // Läser in svaret från användaren
             return svar?.ToLower() == "ja"; // Returnerar true om svaret är "ja" och false om svaret är "nej"
         }
 
-        public static void ClearConsole() //Metod för att rensa konsolen. Metoden används på flera ställen i programmet för att förbättra användarvänligheten.
+        public static void ClearConsole() //Metod för att rensa konsolen. Metoden används på flera ställen i programmet för att förbättra användarvänligheten. //CHRISTOFFER
         {
             Console.WriteLine("\nTryck ENTER för att gå vidare.");
             Console.ReadLine();
