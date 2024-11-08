@@ -1,45 +1,46 @@
-﻿namespace Bokningsapp___Grupp_7
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Unicode;
+
+namespace Bokningsapp___Grupp_7
 {
     public class Program
     {
-        // Listor för att lagra bokningar och lokaler
-
-        List<IBookable> bokningar = new List<IBookable>();
-
-        List <IBookable> lokaler = new List<IBookable>();
-
         // Huvudmeyn för programmet. Lägg in metoder i switch-satsen för att anropa dem
         static void Main(string[] args)
         {
-            Program program = new();
-            program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa ny lokal" });
+
+            BokningsManager.LaddaLokaler();  // Laddar lokaler från fil
+            BokningsManager.LaddaBokningar(); // Laddar bokningar från fil
 
             bool running = true;
-
             while (running)
             {
+                Program program = new();
+                program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa lokal" });
                 Console.Write("Välj ett alternativ: ");
-                string input = Console.ReadLine();
-
+                string? input = Console.ReadLine();
+                Lokal lokal = new Lokal();
                 switch (input)
                 {
                     case "1":
-                        Console.WriteLine("Boka lokal");
+                        lokal.SkapaBokning();
                         break;
                     case "2":
-                        Console.WriteLine("Visa bokningar");
+                        lokal.VisaBokningar();
                         break;
                     case "3":
-                        Console.WriteLine("Avboka");
+                        lokal.AvbrytBokning();
                         break;
                     case "4":
-                        Console.WriteLine("Uppdatera bokning");
+                        lokal.UppdateraBokning();
                         break;
                     case "5":
-                        Console.WriteLine("Visa lokaler");
+                        lokal.VisaLokaler(BokningsManager.Lokaler);
                         break;
                     case "6":
-                        Console.WriteLine("Skapa ny lokal");
+                        lokal.SkapaNyLokal();
                         break;
                     case "0":
                         running = false;
@@ -96,9 +97,4 @@
 
         }
     }
-
-
 }
-
-
-
