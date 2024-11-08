@@ -46,10 +46,11 @@ namespace Bokningsapp___Grupp_7
 
         public void SkapaBokning() // Metod för att skapa en bokning
         {
+            
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Tryck 0 för att avbryta.");
+                Console.WriteLine("Tryck 0 för att avbryta.\n");
                 Console.WriteLine("Vilken typ av lokal vill du boka?\n1: Sal\n2: Grupprum");
                 int.TryParse(Console.ReadLine(), out int lokalVal);
 
@@ -62,17 +63,89 @@ namespace Bokningsapp___Grupp_7
                 if (lokalVal == 1)
                 {
                     Console.Clear();
-                    Console.WriteLine("Tillgängliga lokaler:");
+                    Console.WriteLine("Lediga salar:");
                     foreach (var lokal in BokningsManager.Lokaler.OfType<Sal>())
                     {
-                        Console.WriteLine($"{lokal.Typ} nummer {lokal.LokalNummer}");
+                        Console.WriteLine($"{lokal.Typ} {lokal.LokalNummer}");
                     }
 
-                    Console.WriteLine("\nVilket salnummer?");
-                    Console.Write("Salnummer: ");
+                    Console.WriteLine("\nVilken sal vill du boka?");
                     int.TryParse(Console.ReadLine(), out int salNr);
 
                     var sal = BokningsManager.Lokaler.OfType<Sal>().FirstOrDefault(s => s.LokalNummer == salNr);
+                    if (sal != null)
+                    {
+                        Random randomBokNr = new Random();
+
+                        Console.WriteLine("Ange ditt namn: ");
+                        BokadAv = Console.ReadLine();
+
+                        Console.WriteLine("Ange starttid (yyyy-MM-dd HH:mm): ");
+                        string? startTid = Console.ReadLine();
+
+                        Console.WriteLine("Hur många timmar vill du boka: ");
+                        string? period = Console.ReadLine();
+                        try
+                        {
+                            StartTid = DateTime.Parse(startTid);
+                            Period = TimeSpan.FromHours(double.Parse(period));
+                            SlutTid = StartTid + Period;
+                            bool hasConflict = false;
+
+                            foreach (var bokning in BokningsManager.Bokningar)
+                            {
+                                if (StartTid < bokning.SlutTid && SlutTid > bokning.StartTid)
+                                {
+                                    hasConflict = true;
+                                    break;
+                                }
+                            }
+                            if (hasConflict)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
+                                ClearConsole();
+                            }
+                            else
+                            {
+                                do
+                                {
+                                    BokningsNr = randomBokNr.Next(100, 201);
+                                } while (BokningsManager.Bokningar.Any(b => b.BokningsNr == BokningsNr));
+
+                                BokningsManager.Bokningar.Add(this);
+                                BokningsManager.SparaBokningar();
+                                Console.Clear();
+                                Console.WriteLine($"Bokning skapad. Tid: {StartTid} till {SlutTid}\nDu har fått bokningsnummer: {BokningsNr}");
+                                ClearConsole();
+                                return;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Felaktig inmatning. Försök igen.");
+                            ClearConsole();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Sal hittades inte");
+                        ClearConsole();
+                    }
+                }
+                if (lokalVal == 2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Lediga grupprum:");
+                    foreach (var lokal in BokningsManager.Lokaler.OfType<Sal>())
+                    {
+                        Console.WriteLine($"{lokal.Typ} {lokal.LokalNummer}");
+                    }
+
+                    Console.WriteLine("\nVilket grupprum vill du boka?");
+                    int.TryParse(Console.ReadLine(), out int salNr);
+
+                    var sal = BokningsManager.Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == salNr);
                     if (sal != null)
                     {
                         Random randomBokNr = new Random();
@@ -89,11 +162,22 @@ namespace Bokningsapp___Grupp_7
                         StartTid = DateTime.Parse(startTid);
                         Period = TimeSpan.FromHours(double.Parse(period));
                         SlutTid = StartTid + Period;
+                        bool hasConflict = false;
 
-                        if (StartTid.Equals(sal.StartTid) || Period.Equals(sal.Period))  //FUNGERAR??
+                        foreach (var bokning in BokningsManager.Bokningar)
                         {
-                            Console.WriteLine("Salen är redan bokad den tiden.");
-                            continue;
+                            if (StartTid < bokning.SlutTid && SlutTid > bokning.StartTid)
+                            {
+                                hasConflict = true;
+                                break;
+                            }
+                        }
+
+                        if (hasConflict)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
+                            ClearConsole();
                         }
                         else
                         {
@@ -104,7 +188,8 @@ namespace Bokningsapp___Grupp_7
 
                             BokningsManager.Bokningar.Add(this);
                             BokningsManager.SparaBokningar();
-                            Console.WriteLine($"Bokning skapad. Du har fått bokningsnummer: {BokningsNr}");
+                            Console.Clear();
+                            Console.WriteLine($"Bokning skapad. Tid: {StartTid} till {SlutTid}\nDu har fått bokningsnummer: {BokningsNr}");
                             ClearConsole();
                             return;
                         }
@@ -115,6 +200,7 @@ namespace Bokningsapp___Grupp_7
                         ClearConsole();
                     }
                 }
+                
             }
         }
         public void AvbrytBokning() // Metod för att avboka en bokning som redan finns //RASHIID & CHRISTOFFER
@@ -183,8 +269,8 @@ namespace Bokningsapp___Grupp_7
                 ClearConsole();
                 return;
             }
-
-            Console.WriteLine("Nuvarande bokningar:");
+            Console.Clear();
+            Console.WriteLine("Nuvarande bokningar:\n");
 
             // Loopar igenom varje bokning i listan och skriver ut information
             foreach (var bokning in BokningsManager.Bokningar)
