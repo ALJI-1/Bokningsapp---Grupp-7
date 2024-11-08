@@ -38,7 +38,7 @@ namespace Bokningsapp___Grupp_7
                     Console.WriteLine("Salnumret måste vara mellan 1 och 100");
                     inputSalNr = Console.ReadLine();
                 }
-                bool salFinns = Program.lokaler.OfType<Sal>().Any(s => s.LokalNummer == salNr); // Kollar om salnumret redan finns
+                bool salFinns = BokningsManager.Lokaler.OfType<Sal>().Any(s => s.LokalNummer == salNr); // Kollar om salnumret redan finns
                 if (salFinns)
                 {
                     Console.WriteLine("Salnumret finns redan. Ange ett annat salnummer");
@@ -78,10 +78,9 @@ namespace Bokningsapp___Grupp_7
             bool harBrandsläckare = BoolFråga("Har salen brandsläckare? (ja/nej)");
 
             Sal nySal = new Sal(salNr, salKapacitet, harWhiteboard, harNödutgång, harWebkamera, harBrandsläckare); // Skapar en ny sal
-            Program.lokaler.Add(nySal); // Lägger till salen i listan lokaler
+            BokningsManager.Lokaler.Add(nySal); // Lägger till salen i listan lokaler
             Console.WriteLine("En ny sal har skapats.");
-            string sparadeLokaler = JsonSerializer.Serialize(Program.lokaler);
-            File.WriteAllText("lokaler.json", sparadeLokaler);
+            BokningsManager.SparaLokaler(); // Sparar lokaler till fil
             ClearConsole(); // Rensar konsollen
             return nySal; // Behövs denna?
         }

@@ -39,7 +39,7 @@ namespace Bokningsapp___Grupp_7
                     Console.WriteLine("Rumnumret måste vara mellan 1 och 100");
                     inputRumNr = Console.ReadLine();
                 }
-                bool rumFinns = Program.lokaler.OfType<Grupprum>().Any(r => r.LokalNummer == rumNr); // Kollar om rumnumret redan finns
+                bool rumFinns = BokningsManager.Lokaler.OfType<Grupprum>().Any(r => r.LokalNummer == rumNr); // Kollar om rumnumret redan finns
                 if (rumFinns)
                 {
                     Console.WriteLine("Rumnumret finns redan. Ange ett annat rumnummer");
@@ -77,10 +77,9 @@ namespace Bokningsapp___Grupp_7
             bool harTvSkärm = BoolFråga("Har rummet en TV-skärm? (ja/nej)");
 
             Grupprum nyttRum = new Grupprum(rumNr, rumKapacitet, harWhiteboard, harNödutgång, ärLjudisolerat, harTvSkärm); // Skapar en ny instans av Grupprum
-            Program.lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
+            BokningsManager.Lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
             Console.WriteLine("Ett nytt grupprum har skapats.");
-            string sparadeLokaler = JsonSerializer.Serialize(Program.lokaler);
-            File.WriteAllText("lokaler.json", sparadeLokaler);
+            BokningsManager.SparaLokaler(); // Sparar lokaler till fil
             ClearConsole(); // Rensar konsollen
             return nyttRum; // Behövs denna returnering?
         }
