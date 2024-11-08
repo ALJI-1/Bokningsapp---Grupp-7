@@ -27,7 +27,7 @@ namespace Bokningsapp___Grupp_7
                     Lokaler.Add(item.Deserialize<Grupprum>());
             }
         }
-        
+
         public static void LaddaBokningar()
         {
             var jsonBokningar = File.ReadAllText("bokningar.json");
@@ -36,12 +36,32 @@ namespace Bokningsapp___Grupp_7
             Bokningar.Clear();
             foreach (var item in jsonBokningarList)
             {
-                if (item["Typ"]?.ToString() == "1")
-                    Bokningar.Add(item.Deserialize<Sal>());
-                else if (item["Typ"]?.ToString() == "0")
-                    Bokningar.Add(item.Deserialize<Grupprum>());
+                var startTid = item["StartTid"]?.GetValue<DateTime>();
+                var slutTid = item["SlutTid"]?.GetValue<DateTime>();
+                TimeSpan? period = null;
+                if (item["Period"] != null)
+                {
+                    period = TimeSpan.Parse(item["Period"].ToString());
+                }
+
+                var bokadAv = item["BokadAv"]?.ToString();
+                var bokningsNr = item["BokningsNr"]?.GetValue<int>();
+
+                if (startTid.HasValue && slutTid.HasValue && period.HasValue && bokadAv != null && bokningsNr.HasValue)
+                {
+                    var lokal = new Lokal
+                    {
+                        StartTid = startTid.Value,
+                        SlutTid = slutTid.Value,
+                        Period = period.Value,
+                        BokadAv = bokadAv,
+                        BokningsNr = bokningsNr.Value
+                    };
+                    Bokningar.Add(lokal);
+                }
             }
         }
+
 
         public static void SparaLokaler()
         {
