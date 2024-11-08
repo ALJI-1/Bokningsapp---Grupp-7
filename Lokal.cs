@@ -113,6 +113,8 @@ namespace Bokningsapp___Grupp_7
                                     BokningsNr = randomBokNr.Next(100, 201);
                                 } while (BokningsManager.Bokningar.Any(b => b.BokningsNr == BokningsNr));
 
+                                Typ = sal.Typ;
+                                LokalNummer = sal.LokalNummer;
                                 BokningsManager.Bokningar.Add(this);
                                 BokningsManager.SparaBokningar();
                                 Console.Clear();
@@ -137,7 +139,7 @@ namespace Bokningsapp___Grupp_7
                 {
                     Console.Clear();
                     Console.WriteLine("Lediga grupprum:");
-                    foreach (var lokal in BokningsManager.Lokaler.OfType<Sal>())
+                    foreach (var lokal in BokningsManager.Lokaler.OfType<Grupprum>())
                     {
                         Console.WriteLine($"{lokal.Typ} {lokal.LokalNummer}");
                     }
@@ -145,8 +147,8 @@ namespace Bokningsapp___Grupp_7
                     Console.WriteLine("\nVilket grupprum vill du boka?");
                     int.TryParse(Console.ReadLine(), out int salNr);
 
-                    var sal = BokningsManager.Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == salNr);
-                    if (sal != null)
+                    var gruppRum = BokningsManager.Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == salNr);
+                    if (gruppRum != null)
                     {
                         Random randomBokNr = new Random();
 
@@ -186,6 +188,8 @@ namespace Bokningsapp___Grupp_7
                                 BokningsNr = randomBokNr.Next(100, 201);
                             } while (BokningsManager.Bokningar.Any(b => b.BokningsNr == BokningsNr));
 
+                            Typ = gruppRum.Typ;
+                            LokalNummer = gruppRum.LokalNummer;
                             BokningsManager.Bokningar.Add(this);
                             BokningsManager.SparaBokningar();
                             Console.Clear();
@@ -235,10 +239,10 @@ namespace Bokningsapp___Grupp_7
         }
         public void UppdateraBokning() // Metod för att uppdatera en bokning (exempelvis byta tid, byta lokal osv.) //RASHIID & CHRISTOFFER
         {
-            Console.WriteLine("Uppdatera bokning");
-            Console.WriteLine("Ange namnet du bokade i: ");
-            string? bokadAv = Console.ReadLine();
-            var bokning = BokningsManager.Bokningar.Find(b => b.BokadAv == bokadAv);
+            Console.WriteLine("Ange bokningsnummer: ");
+            int.TryParse(Console.ReadLine(), out int bokNr);
+            var bokning = BokningsManager.Bokningar.Find(b => b.BokningsNr == bokNr);
+
             if (bokning != null)
             {
                 Console.WriteLine("Bokning hittad");
@@ -247,15 +251,18 @@ namespace Bokningsapp___Grupp_7
 
                 Console.WriteLine("Ange ny varaktighet (timmar): ");
                 string? nyPeriod = Console.ReadLine();
-                StartTid = DateTime.Parse(nyStartTid);
-                Period = TimeSpan.FromHours(double.Parse(nyPeriod));
+                
+                bokning.StartTid = DateTime.Parse(nyStartTid);
+                bokning.Period = TimeSpan.FromHours(double.Parse(nyPeriod));
+                bokning.SlutTid = bokning.StartTid + bokning.Period;
 
                 Console.WriteLine("Bokning uppdaterad");
-                BokningsManager.SparaBokningar();
+                ClearConsole();
             }
             else
             {
                 Console.WriteLine("Bokning hittades inte");
+                ClearConsole();
             }
         }
 
@@ -269,19 +276,63 @@ namespace Bokningsapp___Grupp_7
                 ClearConsole();
                 return;
             }
-            Console.Clear();
-            Console.WriteLine("Nuvarande bokningar:\n");
-
-            // Loopar igenom varje bokning i listan och skriver ut information
-            foreach (var bokning in BokningsManager.Bokningar)
+            else
             {
-                Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
-                Console.WriteLine($"Bokad av: {bokning.BokadAv}");
-                Console.WriteLine($"Starttid: {bokning.StartTid}");
-                Console.WriteLine($"Sluttid: {bokning.SlutTid}");
-                Console.WriteLine("------------"); // Avgränsare mellan bokningar
+                Console.Clear();
+                Console.WriteLine("Visa bokningar\n\n1. Visa alla bokningar\n2. Visa bokningar från specifikt år");
+                String? input = Console.ReadLine();
+                if (input == "1")
+                {
+                    Console.Clear();
+                    Console.WriteLine("Nuvarande bokningar:\n");
+
+                    // Loopar igenom varje bokning i listan och skriver ut information
+                    foreach (var bokning in BokningsManager.Bokningar)
+                    {
+                        Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
+                        Console.WriteLine($"Bokad av: {bokning.BokadAv}");
+                        Console.WriteLine($"Lokal: {bokning.Typ} {bokning.LokalNummer}");
+                        Console.WriteLine($"Starttid: {bokning.StartTid}");
+                        Console.WriteLine($"Sluttid: {bokning.SlutTid}");
+                        Console.WriteLine("------------------------");
+                    }
+                    Console.ReadKey();
+                }
+                if (input == "2")
+                {
+                    Console.Clear();
+                    Console.WriteLine("Vilket år?");
+                    String? inputYear = Console.ReadLine();
+                    
+                    if (int.TryParse(inputYear, out int year))
+                    {
+                        var bookingYear = BokningsManager.Bokningar.Where(b => b.StartTid?.Year == year).ToList();
+
+                        if (bookingYear.Count > 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"Bokningar från året {year}:\n");
+                            foreach (var bokning in bookingYear)
+                            {
+                                Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
+                                Console.WriteLine($"Bokad av: {bokning.BokadAv}");
+                                Console.WriteLine($"Lokal: {bokning.Typ} {bokning.LokalNummer}");
+                                Console.WriteLine($"Starttid: {bokning.StartTid}");
+                                Console.WriteLine($"Sluttid: {bokning.SlutTid}");
+                                Console.WriteLine("------------------------");
+                            }
+                            Console.ReadKey();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Inga bokningar från detta år.");
+                        ClearConsole();
+                        return;
+                    }
+                } 
             }
-            ClearConsole();
+            
         }
         public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // CHRISTOFFER
         {

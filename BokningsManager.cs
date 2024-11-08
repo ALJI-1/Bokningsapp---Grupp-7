@@ -46,8 +46,10 @@ namespace Bokningsapp___Grupp_7
 
                 var bokadAv = item["BokadAv"]?.ToString();
                 var bokningsNr = item["BokningsNr"]?.GetValue<int>();
+                var lokalTyp = (LokalTyp)Enum.Parse(typeof(LokalTyp), item["Typ"]?.ToString());
+                var lokalNummer = item["LokalNummer"]?.GetValue<int>();
 
-                if (startTid.HasValue && slutTid.HasValue && period.HasValue && bokadAv != null && bokningsNr.HasValue)
+                if (startTid.HasValue && slutTid.HasValue && period.HasValue && bokadAv != null && bokningsNr.HasValue && lokalNummer.HasValue)
                 {
                     var lokal = new Lokal
                     {
@@ -55,7 +57,9 @@ namespace Bokningsapp___Grupp_7
                         SlutTid = slutTid.Value,
                         Period = period.Value,
                         BokadAv = bokadAv,
-                        BokningsNr = bokningsNr.Value
+                        BokningsNr = bokningsNr.Value,
+                        Typ = lokalTyp,
+                        LokalNummer = lokalNummer.Value
                     };
                     Bokningar.Add(lokal);
                 }
