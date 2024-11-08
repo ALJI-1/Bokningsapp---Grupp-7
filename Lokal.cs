@@ -23,9 +23,9 @@ namespace Bokningsapp___Grupp_7
         public int Kapacitet { get; set; } // Lokalens kapacitet. Hur många sittplatser när man skapar ny lokal
         public bool HarWhiteboard { get; set; } // Om lokalen har whiteboard (bool)
         public bool HarNödutgång { get; set; } // Om lokalen har nödutgång (bool)
-        public DateTime? StartTid { get; private set; } // Bokningens starttid
-        public DateTime? SlutTid { get; private set; } // Bokningens sluttid
-        public TimeSpan? Period { get; private set; }  // Bokningens varaktighet
+        public DateTime? StartTid { get; set; } // Bokningens starttid
+        public DateTime? SlutTid { get; set; } // Bokningens sluttid
+        public TimeSpan? Period { get; set; }  // Bokningens varaktighet
         public int BokningsNr { get; set; }
 
         // ---------- Konstruktorer ----------
@@ -88,7 +88,9 @@ namespace Bokningsapp___Grupp_7
 
                         StartTid = DateTime.Parse(startTid);
                         Period = TimeSpan.FromHours(double.Parse(period));
-                        if (StartTid.Equals(sal.StartTid) || Period.Equals(sal.Period))
+                        SlutTid = StartTid + Period;
+
+                        if (StartTid.Equals(sal.StartTid) || Period.Equals(sal.Period))  //FUNGERAR??
                         {
                             Console.WriteLine("Salen är redan bokad den tiden.");
                             continue;
@@ -175,33 +177,25 @@ namespace Bokningsapp___Grupp_7
         {
 
             // Kollar om det finns några bokningar
-            if (Program.bokningar.Count == 0)
+            if (BokningsManager.Bokningar.Count == 0)
             {
                 Console.WriteLine("Ingen bokningar finns för tillfället.");
+                ClearConsole();
                 return;
             }
 
             Console.WriteLine("Nuvarande bokningar:");
 
             // Loopar igenom varje bokning i listan och skriver ut information
-            foreach (var bokning in Program.bokningar)
+            foreach (var bokning in BokningsManager.Bokningar)
             {
+                Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
                 Console.WriteLine($"Bokad av: {bokning.BokadAv}");
-
-                // Om starttid och sluttid finns, skriv ut dem
-                int SlutTid = bokning.SlutTid;
-                if (bokning.StartTid && bokning.SlutTid)
-                {
-                    Console.WriteLine($"Starttid: {bokning.StartTid}");
-                    Console.WriteLine($"Sluttid: {bokning.SlutTid}");
-                }
-                else
-                {
-                    Console.WriteLine("Tid ej satt.");
-                }
-
+                Console.WriteLine($"Starttid: {bokning.StartTid}");
+                Console.WriteLine($"Sluttid: {bokning.SlutTid}");
                 Console.WriteLine("------------"); // Avgränsare mellan bokningar
             }
+            ClearConsole();
         }
         public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // CHRISTOFFER
         {
