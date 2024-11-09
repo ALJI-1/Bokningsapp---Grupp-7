@@ -184,10 +184,11 @@ namespace Bokningsapp___Grupp_7
             }
             Console.Clear();
 
-            Console.WriteLine("--- Visa bokningar ---\n\n Tryck 1 för att se alla bokningar eller skriv in vilket år du vill se bokningar för.");
+            Console.WriteLine("--- Visa bokningar ---\n\nTryck 1 för att se alla bokningar.\n\nELLER\nSkriv in vilket år du vill se bokningar för.");
             String? input = Console.ReadLine();
             if (input == "1")
             {
+                Console.Clear();
                 Console.WriteLine("--- Kommande bokningar: ---\n");
 
                 // Sorterar bokningarna i de som har varit och de som kommer. Jämför med dagens datum och tid
@@ -200,6 +201,7 @@ namespace Bokningsapp___Grupp_7
                 {
                     Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
                     Console.WriteLine($"Bokad av: {bokning.BokadAv}");
+                    Console.WriteLine($"Lokal: {bokning.Typ} {bokning.LokalNummer}");
                     Console.WriteLine($"Starttid: {bokning.StartTid}");
                     Console.WriteLine($"Sluttid: {bokning.SlutTid}");
                     Console.WriteLine("------------------------"); // Avgränsare mellan bokningar
@@ -212,6 +214,7 @@ namespace Bokningsapp___Grupp_7
                 {
                     Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
                     Console.WriteLine($"Bokad av: {bokning.BokadAv}");
+                    Console.WriteLine($"Lokal: {bokning.Typ} {bokning.LokalNummer}");
                     Console.WriteLine($"Starttid: {bokning.StartTid}");
                     Console.WriteLine($"Sluttid: {bokning.SlutTid}");
                     Console.WriteLine("------------------------");
@@ -219,8 +222,9 @@ namespace Bokningsapp___Grupp_7
 
                 Lokal.ClearConsole();
             }
-            else if (int.TryParse(input, out int year))
+            if (int.TryParse(input, out int year))
             {
+                Console.Clear();
                 var bookingYear = BokningsManager.Bokningar.Where(b => b.StartTid?.Year == year).OrderBy(b => b.StartTid).ToList();
                 if (bookingYear.Count > 0)
                 {
@@ -228,16 +232,15 @@ namespace Bokningsapp___Grupp_7
                     {
                         Console.WriteLine($"Bokningsnummer: {bokning.BokningsNr}");
                         Console.WriteLine($"Bokad av: {bokning.BokadAv}");
+                        Console.WriteLine($"Lokal: {bokning.Typ} {bokning.LokalNummer}");
                         Console.WriteLine($"Starttid: {bokning.StartTid}");
                         Console.WriteLine($"Sluttid: {bokning.SlutTid}");
                         Console.WriteLine("------------------------");
-
+                        
                     }
+                    Console.ReadKey();
                 }
             }
-
-            
-
         }
         public void UppdateraBokning() // Metod för att uppdatera en bokning (exempelvis byta tid, byta lokal osv.) //RASHIID & CHRISTOFFER
         {
