@@ -22,19 +22,20 @@ namespace Bokningsapp___Grupp_7
                 Console.Write("Välj ett alternativ: ");
                 string? input = Console.ReadLine();
                 Lokal lokal = new Lokal();
+                BokningsManager bokningsManager = new BokningsManager();
                 switch (input)
                 {
                     case "1":
-                        lokal.SkapaBokning();
+                        bokningsManager.SkapaBokning();
                         break;
                     case "2":
-                        lokal.VisaBokningar();
+                        bokningsManager.VisaBokningar();
                         break;
                     case "3":
-                        lokal.AvbrytBokning();
+                        bokningsManager.AvbrytBokning();
                         break;
                     case "4":
-                        lokal.UppdateraBokning();
+                        bokningsManager.UppdateraBokning();
                         break;
                     case "5":
                         lokal.VisaLokaler(BokningsManager.Lokaler);

@@ -14,77 +14,38 @@ namespace Bokningsapp___Grupp_7
         public bool HarWebkamera { get; set; } 
         public bool HarBrandsläckare { get; set; }
 
-        // Konstruktor
-        public Sal(int lokalNummer, int kapacitet, bool harWhiteboard, bool harNödutgång, bool harWebkamera, bool harBrandsläckare) : base(LokalTyp.Sal, lokalNummer, kapacitet, harWhiteboard, harNödutgång)
+        // Konstruktorer
+        public Sal(int lokalNummer, int kapacitet, bool harWhiteboard, bool harNödutgång, bool harWebkamera, bool harBrandsläckare) 
+            : base(LokalTyp.Sal, lokalNummer, kapacitet, harWhiteboard, harNödutgång)
         {
             HarWebkamera = harWebkamera;
             HarBrandsläckare = harBrandsläckare;
         }
-
-        public static Sal SkapaNySal() // Metod för att skapa en ny sal
+        public Sal()
         {
-            int salNr; // Variabel för att lagra salnumret
-            while (true)
-            {
-                Console.WriteLine("Ange salnummer");
-                string? inputSalNr = Console.ReadLine();
-                if (!int.TryParse(inputSalNr, out salNr)) // Kollar om inmatningen är korrekt.
-                {
-                    Console.WriteLine("Felaktig inmatning. Ange ett giltigt salnummer");
-                    inputSalNr = Console.ReadLine();
-                }
-                if (salNr < 1 || salNr > 100) // Kollar om salnumret är mellan 1 och 100
-                {
-                    Console.WriteLine("Salnumret måste vara mellan 1 och 100");
-                    inputSalNr = Console.ReadLine();
-                }
-                bool salFinns = BokningsManager.Lokaler.OfType<Sal>().Any(s => s.LokalNummer == salNr); // Kollar om salnumret redan finns
-                if (salFinns)
-                {
-                    Console.WriteLine("Salnumret finns redan. Ange ett annat salnummer");
-                    inputSalNr = Console.ReadLine();
-                }
-                else
-                {
-                    
-                    break;
-                }
-            }
 
-            int salKapacitet;
-            while (true)
-            {
-                Console.WriteLine("Ange salens kapacitet");
-                string? inputSalKapacitet = Console.ReadLine(); // Variabel för att lagra kapaciteten
-                if (!int.TryParse(inputSalKapacitet, out salKapacitet)) // kollar om inmatningen är korrekt.
-                {
-                    Console.WriteLine("Felaktig inmatning.");
-                    inputSalKapacitet = Console.ReadLine();
-                }
-                if (salKapacitet < 10 || salKapacitet > 200) // Bra gränser på kapaciteten?
-                {
-                    Console.WriteLine("Kapaciteten måste vara minst 10 och max 200");
-                    inputSalKapacitet = Console.ReadLine();
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            bool harWhiteboard = BoolFråga("Har salen en whiteboard? (ja/nej)"); // Frågar om salen har diverse med metoden BoolFråga
-            bool harNödutgång = BoolFråga("Har salen en nödutgång? (ja/nej)");
-            bool harWebkamera = BoolFråga("Har salen webkamera? (ja/nej)");
-            bool harBrandsläckare = BoolFråga("Har salen brandsläckare? (ja/nej)");
-
-            Sal nySal = new Sal(salNr, salKapacitet, harWhiteboard, harNödutgång, harWebkamera, harBrandsläckare); // Skapar en ny sal
-            BokningsManager.Lokaler.Add(nySal); // Lägger till salen i listan lokaler
-            Console.WriteLine("En ny sal har skapats.");
-            BokningsManager.SparaLokaler(); // Sparar lokaler till fil
-            ClearConsole(); // Rensar konsollen
-            return nySal; // Behövs denna?
         }
 
-    }
-    
+        protected override void SkapaSpecifikLokal(string typ)
+        {
+            if (typ == "sal")
+            {
+                // Frågar om rummet har diverse med metoden BoolFråga
+                Console.Clear();
+                bool harWhiteboard = BoolFråga("Har rummet whiteboard? (ja/nej)"); 
+                bool harNödutgång = BoolFråga("Har rummet nödutgång? (ja/nej)");
+                bool harWebkamera = BoolFråga("Har salen webkamera? (ja/nej)"); ;
+                bool harBrandsläckare = BoolFråga("Har salen brandsläckare? (ja/nej)");
+
+                // Skapa en ny instans av Sal och spara den
+                Sal nyttRum = new Sal(this.LokalNummer, this.Kapacitet, harWhiteboard, harNödutgång, harWebkamera, harBrandsläckare);
+
+                BokningsManager.Lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
+                Console.Clear();
+                Console.WriteLine("En ny sal har skapats.");
+                BokningsManager.SparaLokaler(); // Sparar lokaler till fil
+                ClearConsole();
+            }
+        }
+    }    
 }
