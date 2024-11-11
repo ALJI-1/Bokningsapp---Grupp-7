@@ -369,6 +369,11 @@ namespace Bokningsapp___Grupp_7
         }
         public static void LaddaLokaler()
         {
+            if (!File.Exists("lokaler.json"))
+            {
+                File.WriteAllText("lokaler.json", "[]");
+            }
+
             var jsonLokaler = File.ReadAllText("lokaler.json");
             var jsonList = JsonSerializer.Deserialize<List<JsonObject>>(jsonLokaler);
 
@@ -386,7 +391,12 @@ namespace Bokningsapp___Grupp_7
         }
 
         public static void LaddaBokningar()
+
         {
+            if (!File.Exists("bokningar.json"))
+            {
+                File.WriteAllText("bokningar.json", "[]");
+            }
             var jsonBokningar = File.ReadAllText("bokningar.json");
             var jsonBokningarList = JsonSerializer.Deserialize<List<JsonObject>>(jsonBokningar);
 
