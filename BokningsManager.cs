@@ -79,6 +79,7 @@ namespace Bokningsapp___Grupp_7
                                 break;
                             }
                         }
+                        // Försöker att skapa en bokning med de angivna värdena
                         try
                         {
                             sal.StartTid = DateTime.Parse(startTid);
@@ -89,6 +90,7 @@ namespace Bokningsapp___Grupp_7
 
                             foreach (var bokning in Bokningar)
                             {
+                                // Kontrollerar om den nya bokningen krockar med någon annan bokning
                                 if (sal.StartTid < bokning.SlutTid && sal.SlutTid > bokning.StartTid)
                                 {
                                     hasConflict = true;
@@ -101,6 +103,7 @@ namespace Bokningsapp___Grupp_7
                                 Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
                                 Lokal.ClearConsole();
                             }
+                            // Om ingen dubbelbokning hittas, skapas bokningen
                             else
                             {
                                 do
@@ -118,6 +121,7 @@ namespace Bokningsapp___Grupp_7
                                 return;
                             }
                         }
+                        // Om felaktig inmatning, informera användaren och rensa konsolen
                         catch (Exception)
                         {
                             Console.WriteLine("Felaktig inmatning. Försök igen.");
@@ -171,6 +175,7 @@ namespace Bokningsapp___Grupp_7
                             Lokal.ClearConsole();
                             continue;
                         }
+                        // Försöker att skapa en bokning med de angivna värdena
                         try
                         {
                             grupprum.StartTid = DateTime.Parse(startTid);
@@ -178,7 +183,7 @@ namespace Bokningsapp___Grupp_7
                             grupprum.SlutTid = grupprum.StartTid + grupprum.Period;
 
                             bool hasConflict = false;
-
+                            // Kontrollerar om den nya bokningen krockar med någon annan bokning
                             foreach (var bokning in Bokningar)
                             {
                                 if (grupprum.StartTid < bokning.SlutTid &&
@@ -194,6 +199,7 @@ namespace Bokningsapp___Grupp_7
                                 Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
                                 Lokal.ClearConsole();
                             }
+                            // Om ingen dubbelbokning hittas, skapas bokningen
                             else
                             {
                                 do
@@ -223,7 +229,6 @@ namespace Bokningsapp___Grupp_7
                         Lokal.ClearConsole();
                     }
                 }
-
             }
         }
         public void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit
@@ -314,7 +319,7 @@ namespace Bokningsapp___Grupp_7
             }
         }
 
-        public void UppdateraBokning() // Metod för att uppdatera en bokning //RASHIID & CHRISTOFFER
+        public void UppdateraBokning() // Metod för att uppdatera en bokning 
         {
             while (true)
             {
@@ -322,6 +327,8 @@ namespace Bokningsapp___Grupp_7
                 Console.WriteLine("Tryck 0 för att avbryta.\n");
                 Console.WriteLine("Ange bokningsnummer: ");
                 int.TryParse(Console.ReadLine(), out int bokNr);
+
+                // Söker efter en bokning i listan 'Bokningar' baserat på det angivna bokningsnumret
                 var nyBokning = Bokningar.Find(b => b.BokningsNr == bokNr);
 
                 if (bokNr == 0)
@@ -331,13 +338,12 @@ namespace Bokningsapp___Grupp_7
                 }
                 if (nyBokning != null)
                 {
+                    // Om bokningen hittas, skrivs informationen ut och användaren får möjlighet att uppdatera bokningen
                     Console.WriteLine("Bokning hittad");
                     Console.WriteLine("Ange nytt startdatum (yyyy-MM-dd): ");
                     string? nyttStartDatum = Console.ReadLine();
-
                     Console.WriteLine("Ange ny starttid (HH-mm): ");
                     string? nyStartKlocka = Console.ReadLine();
-
                     string nyStartTid = $"{nyttStartDatum} {nyStartKlocka}";
 
                     int nyPeriod = 0;
@@ -355,6 +361,7 @@ namespace Bokningsapp___Grupp_7
                             break;
                         }
                     }
+                    // Försöker att uppdatera bokningen med de nya värdena
                     try
                     {
                         nyBokning.StartTid = DateTime.Parse(nyStartTid);
@@ -363,6 +370,7 @@ namespace Bokningsapp___Grupp_7
 
                         bool hasConflict = false;
 
+                        // Kontrollerar om den nya bokningen krockar med någon annan bokning
                         foreach (var bokningar in Bokningar)
                         {
                             if (nyBokning.StartTid > bokningar.SlutTid && nyBokning.SlutTid < bokningar.StartTid)
@@ -377,6 +385,7 @@ namespace Bokningsapp___Grupp_7
                             Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
                             Lokal.ClearConsole();
                         }
+                        // Om ingen dubbelbokning hittas, uppdateras bokningen
                         else
                         {
                             Bokningar.RemoveAll(b => b.BokningsNr == bokNr);
@@ -442,6 +451,7 @@ namespace Bokningsapp___Grupp_7
             }
 
         }
+        // Hämtar existerande lokaler från filen lokaler.json
         public static void LaddaLokaler()
         {
             if (!File.Exists("lokaler.json"))
@@ -453,6 +463,7 @@ namespace Bokningsapp___Grupp_7
             var jsonList = JsonSerializer.Deserialize<List<JsonObject>>(jsonLokaler);
 
             Lokaler.Clear();
+            // Loopar igenom varje JsonObject i listan och lägger till alla existerande lokaler med properies i listan Lokaler
             foreach (var item in jsonList)
             {
                 if (item != null)
@@ -465,16 +476,21 @@ namespace Bokningsapp___Grupp_7
             }
         }
 
+        // Hämtar existerande bokningar från filen bokningar.json
         public static void LaddaBokningar()
         {
+            
             if (!File.Exists("bokningar.json"))
             {
                 File.WriteAllText("bokningar.json", "[]");
             }
+            // Läser in json-filen och deserialiserar den till en lista av JsonObject
             var jsonBokningar = File.ReadAllText("bokningar.json");
             var jsonBokningarList = JsonSerializer.Deserialize<List<JsonObject>>(jsonBokningar);
 
+            // Rensar listan Bokningar
             Bokningar.Clear();
+            // Loopar igenom varje JsonObject i listan och lägger till alla existerande bokningar med properies i listan Bokningar
             foreach (var item in jsonBokningarList)
             {
                 var startTid = item["StartTid"]?.GetValue<DateTime>();
@@ -507,13 +523,15 @@ namespace Bokningsapp___Grupp_7
                 }
             }
         }
-        
+
+        // Sparar lokaler till filen lokaler.json
         public static void SparaLokaler()
         {
             string sparadeLokaler = JsonSerializer.Serialize(Lokaler);
             File.WriteAllText("lokaler.json", sparadeLokaler);
         }
 
+        // Sparar bokningar till filen bokningar.json
         public static void SparaBokningar()
         {
             string sparadeBokningar = JsonSerializer.Serialize(Bokningar);

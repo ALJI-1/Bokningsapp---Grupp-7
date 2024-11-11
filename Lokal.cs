@@ -192,7 +192,7 @@ namespace Bokningsapp___Grupp_7
                             {
                                 Console.Clear();
                                 Console.WriteLine($"Skapar {Typ} {LokalNummer}\n\nKapasitet {Typ}: {(Typ == LokalTyp.Grupprum ? "2-20" : "10-200")}\n\nAnge sittplatser:");
-                                string sittplatser = Console.ReadLine();
+                                String? sittplatser = Console.ReadLine();
                                 // Felhantering
                                 if (!int.TryParse(sittplatser, out int capacity))
                                 {
@@ -262,6 +262,7 @@ namespace Bokningsapp___Grupp_7
             Console.ReadLine();
             Console.Clear();
         }
+
         // En virtuell metod för att skriva ut text i färg. Metoden kan överskridas i subklasserna för att skriva ut text i olika färger.
         protected virtual void PrintInClolor(string text, ConsoleColor color)
         {
