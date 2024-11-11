@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Bokningsapp___Grupp_7
 {
@@ -29,7 +32,7 @@ namespace Bokningsapp___Grupp_7
             {
                 // Frågar om rummet har diverse med metoden BoolFråga
                 Console.Clear();
-                bool harWhiteboard = BoolFråga("Har rummet whiteboard? (ja/nej)"); 
+                bool harWhiteboard = BoolFråga("Har rummet whiteboard? (ja/nej)");
                 bool harNödutgång = BoolFråga("Har rummet nödutgång? (ja/nej)");
                 bool ärLjudisolerat = BoolFråga("Är rummet ljudisolerat? (ja/nej)");
                 bool harTvSkärm = BoolFråga("Har rummet en TV-skärm? (ja/nej)");
@@ -39,11 +42,19 @@ namespace Bokningsapp___Grupp_7
 
                 BokningsManager.Lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
                 Console.Clear();
-                Console.WriteLine("Ett nytt grupprum har skapats.");
+                PrintInClolor("Ett nytt grupprum har skapats.", ConsoleColor.Yellow);
                 BokningsManager.SparaLokaler(); // Sparar lokaler till fil
                 ClearConsole();
 
             }
+        }
+
+        // överskriden metod för att skriva ut text i färg
+        protected override void PrintInClolor(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
     }
 }
