@@ -52,6 +52,7 @@ namespace Bokningsapp___Grupp_7
             if (lokaler.Count == 0) // Om det inte finns några lokaler
             {
                 Console.WriteLine("Inga lokaler finns för tillfället.");
+                ClearConsole();
                 return;
             }
 
