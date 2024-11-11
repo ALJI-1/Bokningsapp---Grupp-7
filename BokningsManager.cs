@@ -403,6 +403,7 @@ namespace Bokningsapp___Grupp_7
 
                 var bokadAv = item["BokadAv"]?.ToString();
                 var bokningsNr = item["BokningsNr"]?.GetValue<int>();
+
                 var lokalTyp = (LokalTyp)Enum.Parse(typeof(LokalTyp), item["Typ"]?.ToString());
                 var lokalNummer = item["LokalNummer"]?.GetValue<int>();
 
