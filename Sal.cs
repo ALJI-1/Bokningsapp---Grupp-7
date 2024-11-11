@@ -14,18 +14,14 @@ namespace Bokningsapp___Grupp_7
         public bool HarWebkamera { get; set; } 
         public bool HarBrandsläckare { get; set; }
 
-        // Konstruktorer
+        // Konstruktor som tar in alla properties, inklusive de från basklassen
         public Sal(int lokalNummer, int kapacitet, bool harWhiteboard, bool harNödutgång, bool harWebkamera, bool harBrandsläckare) 
             : base(LokalTyp.Sal, lokalNummer, kapacitet, harWhiteboard, harNödutgång)
         {
             HarWebkamera = harWebkamera;
             HarBrandsläckare = harBrandsläckare;
         }
-        public Sal()
-        {
-
-        }
-
+        // Metod för att skapa en specifik lokal
         protected override void SkapaSpecifikLokal(string typ)
         {
             if (typ == "sal")

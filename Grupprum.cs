@@ -15,16 +15,14 @@ namespace Bokningsapp___Grupp_7
         public bool ÄrLjudisolerat { get; set; }
         public bool HarTvSkärm { get; set; }
 
-        // Konstruktorer
+        // Konstruktor som tar in alla properties, inklusive de från basklassen
         public Grupprum(int lokalNummer, int kapacitet, bool harWhiteboard, bool harNödutgång, bool ärLjudisolerat, bool harTvSkärm) : base(LokalTyp.Grupprum, lokalNummer, kapacitet, harWhiteboard, harNödutgång)
         {
             ÄrLjudisolerat = ärLjudisolerat;
             HarTvSkärm = harTvSkärm;
         }
-        public Grupprum()
-        {
 
-        }
+        // Metod för att skapa en specifik lokal
         protected override void SkapaSpecifikLokal(string typ)
         {
             if (typ == "grupprum")

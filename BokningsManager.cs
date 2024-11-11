@@ -15,7 +15,6 @@ namespace Bokningsapp___Grupp_7
 
         public void SkapaBokning() // Metod för att skapa en bokning
         {
-
             while (true)
             {
                 Console.Clear();
@@ -26,13 +25,11 @@ namespace Bokningsapp___Grupp_7
                     Console.WriteLine("Felaktig inmatning. Försök igen.");
                     continue;
                 }
-
                 if (lokalVal == 0)
                 {
                     Lokal.ClearConsole();
                     return;
                 }
-
                 if (lokalVal == 1)
                 {
                     Console.Clear();
@@ -80,7 +77,6 @@ namespace Bokningsapp___Grupp_7
                                 break;
                             }
                         }
-
                         try
                         {
                             sal.StartTid = DateTime.Parse(startTid);
@@ -173,7 +169,6 @@ namespace Bokningsapp___Grupp_7
                             Lokal.ClearConsole();
                             continue;
                         }
-
                         try
                         {
                             grupprum.StartTid = DateTime.Parse(startTid);
@@ -228,11 +223,10 @@ namespace Bokningsapp___Grupp_7
 
             }
         }
-
-        public static void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit // Rashid, Albin 
+        public void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit
         {
             Console.Clear();
-            // Kollar om det finns några bokningar
+            // Kollar om det överhuvudtaget finns några bokningar
             if (Bokningar.Count == 0)
             {
                 Console.WriteLine("Ingen bokningar finns för tillfället.");
@@ -241,6 +235,7 @@ namespace Bokningsapp___Grupp_7
             }
             Console.Clear();
 
+            // Användaren kan välja att se alla bokningar eller bokningar för ett specifikt år
             Console.WriteLine("--- Visa bokningar ---\n\nTryck 1 för att se alla bokningar.\n\nELLER\nSkriv in vilket år du vill se bokningar för.");
             String? input = Console.ReadLine();
             if (input == "1")
@@ -279,10 +274,14 @@ namespace Bokningsapp___Grupp_7
 
                 Lokal.ClearConsole();
             }
-            if (int.TryParse(input, out int year))
+            else if (int.TryParse(input, out int year))
             {
                 Console.Clear();
+
+                // Hämtar alla bokningar för det angivna året och sorterar dem efter starttid
                 var bookingYear = Bokningar.Where(b => b.StartTid?.Year == year).OrderBy(b => b.StartTid).ToList();
+
+                // Om det finns bokningar för det angivna året, skrivs de ut
                 if (bookingYear.Count > 0)
                 {
                     foreach (var bokning in bookingYear)
@@ -297,10 +296,22 @@ namespace Bokningsapp___Grupp_7
                     }
                     Console.ReadKey();
                 }
+                // Om inga bokningar hittas för det angivna året, skrivs det ut
+                else
+                {
+                    Console.WriteLine("Inga bokningar hittades för det året.");
+                    Lokal.ClearConsole();
+                }
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Felaktig inmatning. Försök igen.");
+                Lokal.ClearConsole();
             }
         }
 
-        public void UppdateraBokning() // Metod för att uppdatera en bokning (exempelvis byta tid, byta lokal osv.) //RASHIID & CHRISTOFFER
+        public void UppdateraBokning() // Metod för att uppdatera en bokning
         {
             Console.Clear();
             Console.WriteLine("Ange bokningsnummer: ");
@@ -335,7 +346,7 @@ namespace Bokningsapp___Grupp_7
                 Lokal.ClearConsole();
             }
         }
-        public void AvbrytBokning() // Metod för att avboka en bokning som redan finns //RASHIID & CHRISTOFFER
+        public void AvbrytBokning() // Metod för att avboka en bokning som redan finns 
         {
             Console.Clear();// Rensar konsolen för att ge en ren vy till användaren
             while (true)// En loop som fortsätter tills användaren avbryter eller en bokning hittas
@@ -375,6 +386,11 @@ namespace Bokningsapp___Grupp_7
         }
         public static void LaddaLokaler()
         {
+            if (!File.Exists("lokaler.json"))
+            {
+                File.WriteAllText("lokaler.json", "[]");
+            }
+
             var jsonLokaler = File.ReadAllText("lokaler.json");
             var jsonList = JsonSerializer.Deserialize<List<JsonObject>>(jsonLokaler);
 
@@ -393,6 +409,10 @@ namespace Bokningsapp___Grupp_7
 
         public static void LaddaBokningar()
         {
+            if (!File.Exists("bokningar.json"))
+            {
+                File.WriteAllText("bokningar.json", "[]");
+            }
             var jsonBokningar = File.ReadAllText("bokningar.json");
             var jsonBokningarList = JsonSerializer.Deserialize<List<JsonObject>>(jsonBokningar);
 

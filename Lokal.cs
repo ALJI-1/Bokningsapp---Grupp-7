@@ -44,12 +44,10 @@ namespace Bokningsapp___Grupp_7
 
         }
 
-        // ---------- Metoder som ska implementeras från interfacet IBookable ----------
-
-        public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // christoffer och albin
+        // Metod för att visa alla lokaler som finns
+        public void VisaLokaler(List<Lokal> lokaler) 
         {
             Console.Clear();
-
             if (lokaler.Count == 0) // Om det inte finns några lokaler
             {
                 Console.WriteLine("Inga lokaler finns för tillfället.");
@@ -132,7 +130,7 @@ namespace Bokningsapp___Grupp_7
             }
             ClearConsole();
         }
-        // SkapaNyLokal - Christoffer och Albin
+        // Skapa en ny lokal - Metoden
         public void SkapaNyLokal()
         {
             do
@@ -162,8 +160,7 @@ namespace Bokningsapp___Grupp_7
                 {
                     Console.Clear();
                     Console.WriteLine("Ange lokalnummer:");
-                    string number = Console.ReadLine();
-                    int rumNr = int.Parse(number);
+                    int.TryParse(Console.ReadLine(), out int rumNr);
 
                     if (rumNr < 1 || rumNr > 100) // Kollar om rumsnumret är mellan 1 och 100
                     {
@@ -241,20 +238,27 @@ namespace Bokningsapp___Grupp_7
         // Det enda den gör är att den skickar med användarens input och tillåter sig överskridas i subklasserna för att skapa lokaler med specifika egenskaper.
         protected virtual void SkapaSpecifikLokal(string typ) { }
 
-        public static bool BoolFråga(string fråga)  //Hjälpmetod för att ställa en fråga som kräver ett ja/nej-svar //CHRISTOFFER
+        public static bool BoolFråga(string fråga)  //Hjälpmetod för att ställa en fråga som kräver ett ja/nej-svar 
         {
-            Console.Write(fråga + " ");
-            string? svar = Console.ReadLine(); // Läser in svaret från användaren
-            return svar?.ToLower() == "ja"; // Returnerar true om svaret är "ja" och false om svaret är "nej"
+            string? svar;
+            do
+            {
+                Console.Write(fråga + " ");
+                svar = Console.ReadLine()?.ToLower(); // Läser in svaret från användaren
+                if (svar != "ja" && svar != "nej")
+                {
+                    Console.WriteLine("Ogiltigt svar.");
+                }
+            } while (svar != "ja" && svar != "nej"); // Fortsätter fråga tills användaren svarar "ja" eller "nej"
+
+            return svar == "ja"; // Returnerar true om svaret är "ja" och false om svaret är "nej"
         }
 
-        public static void ClearConsole() //Metod för att rensa konsolen. Metoden används på flera ställen i programmet för att förbättra användarvänligheten. //CHRISTOFFER
+        public static void ClearConsole() //Metod för att rensa konsolen. Metoden används på flera ställen i programmet för att förbättra användarvänligheten. 
         {
             Console.WriteLine("\nTryck ENTER för att gå vidare.");
             Console.ReadLine();
             Console.Clear();
         }
-
-        // Fler metoder kan läggas till här om det behövs
     }
 }

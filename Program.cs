@@ -7,7 +7,6 @@ namespace Bokningsapp___Grupp_7
 {
     public class Program
     {
-        // Huvudmeyn för programmet. Lägg in metoder i switch-satsen för att anropa dem
         static void Main(string[] args)
         {
 
@@ -17,8 +16,12 @@ namespace Bokningsapp___Grupp_7
             bool running = true;
             while (running)
             {
+                // Skapar en ny instans av programmet för att kunna kalla på metoden PrintMenu som inte är statisk
                 Program program = new();
+
+                // Huvudmeyn för programmet
                 program.PrintMenu(new string[] { "Boka lokal", "Visa bokningar", "Avboka", "Uppdatera bokning", "Visa lokaler", "Skapa lokal" });
+
                 Console.Write("Välj ett alternativ: ");
                 string? input = Console.ReadLine();
                 Lokal lokal = new Lokal();
@@ -29,7 +32,7 @@ namespace Bokningsapp___Grupp_7
                         bokningsManager.SkapaBokning();
                         break;
                     case "2":
-                        BokningsManager.VisaBokningar();
+                        bokningsManager.VisaBokningar();
                         break;
                     case "3":
                         bokningsManager.AvbrytBokning();
