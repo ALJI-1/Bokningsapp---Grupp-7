@@ -337,32 +337,38 @@ namespace Bokningsapp___Grupp_7
         }
         public void AvbrytBokning() // Metod för att avboka en bokning som redan finns //RASHIID & CHRISTOFFER
         {
-            Console.Clear();
-            while (true)
+            Console.Clear();// Rensar konsolen för att ge en ren vy till användaren
+            while (true)// En loop som fortsätter tills användaren avbryter eller en bokning hittas
             {
-                Console.WriteLine("Tryck 0 för att avbryta.");
+                Console.WriteLine("Tryck 0 för att avbryta.");// Informerar användaren om hur de kan avbryta processen
                 Console.Write("Ange bokningsnummer: ");
+                // Försöker läsa in och konvertera användarens inmatning till ett heltal (bokningsnummer)
                 int.TryParse(Console.ReadLine(), out int bokNr);
 
-                if (bokNr == 0)
+                if (bokNr == 0) // Om användaren skriver 0, avbryts processen
                 {
-                    Lokal.ClearConsole();
-                    return;
+                    Lokal.ClearConsole();// Rensar konsolen via en metod i klassen Lokal
+                    return;//Avsluta metod
                 }
-
+                // Söker efter en bokning i listan 'Bokningar' baserat på det angivna bokningsnumret
                 var bokning = Bokningar.Find(b => b.BokningsNr == bokNr);
-                if (bokning != null)
+                if (bokning != null)// Kontroll om bokning hittas
+                    
                 {
-                    Bokningar.Remove(bokning);
-                    Console.WriteLine("Bokning avbokad");
-                    SparaBokningar();
-                    Lokal.ClearConsole();
-                    return;
+                    Bokningar.Remove(bokning);// Ta bort bokning från listan bokningar
+                 
+                    Console.WriteLine("Bokning avbokad"); //Bekräftar att bokning avbokats
+
+                    SparaBokningar();// Sparar änderningarna
+                    Lokal.ClearConsole();// Rensar konsolen efter avbokning
+                    return;//Avsluta metoden efter bokning har avbokats
+                    
                 }
                 else
                 {
+                    // Om ingen bokning hittas med det angivna bokningsnumret, informeras användaren
                     Console.WriteLine("Bokning hittades inte");
-                    Lokal.ClearConsole();
+                    Lokal.ClearConsole();//Rensar konsolen innan loopen start om
                 }
             }
 
