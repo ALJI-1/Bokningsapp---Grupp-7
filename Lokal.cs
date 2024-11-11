@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace Bokningsapp___Grupp_7
         public DateTime? StartTid { get; set; } // Bokningens starttid
         public DateTime? SlutTid { get; set; } // Bokningens sluttid
         public TimeSpan? Period { get; set; }  // Bokningens varaktighet
-        public int BokningsNr { get; set; }
+        public int BokningsNr { get; set; } // Bokningensnummer
 
         // ---------- Konstruktorer ----------
         public Lokal(LokalTyp typ, int lokalNummer, int kapacitet, bool harWhiteboard, bool harNödutgång) // Dessa parametrar måste sättas när en ny lokal skapas
@@ -45,7 +46,7 @@ namespace Bokningsapp___Grupp_7
 
         // ---------- Metoder som ska implementeras från interfacet IBookable ----------
 
-        public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // CHRISTOFFER
+        public void VisaLokaler(List<Lokal> lokaler) // Metod för att visa alla lokaler som finns // christoffer och albin
         {
             Console.Clear();
 
@@ -56,7 +57,7 @@ namespace Bokningsapp___Grupp_7
                 return;
             }
 
-            // Sorterar lokaler efter lokaltyp förs, och sen efter lokalnummer  // albin
+            // Sorterar lokaler efter lokaltyp förs, och sen efter lokalnummer
             lokaler = lokaler.OrderBy(l => l.Typ).ThenBy(l => l.LokalNummer).ToList();  
 
             foreach (var lokal in lokaler) // Loopar igenom alla lokaler och skriver ut information om dem (Grupprum kommer först, sen Salar - i nummerårdning)
@@ -136,6 +137,7 @@ namespace Bokningsapp___Grupp_7
         {
             do
             {
+                // Först får användaren välja vilken typ av lokal som ska skapas. Vi använder oss av en enum för att skilja på de olika typerna. Sätter värdet i propertyn Typ
                 Console.Clear();
                 Console.WriteLine("----- Skapa ny lokal ------\n\nAnge typ av lokal:\n\n1. för Sal\n2. för Grupprum\n\nValfri knapp för att gå tillbaka");
                 if (!int.TryParse(Console.ReadLine(), out int input))
@@ -155,24 +157,24 @@ namespace Bokningsapp___Grupp_7
                     break;
                 }
 
+                // While-loop för att användaren ska kunna skapa en lokal tills den är nöjd med sitt val
                 while (true)
                 {
                     Console.Clear();
                     Console.WriteLine("Ange lokalnummer:");
                     string number = Console.ReadLine();
-                    if (!int.TryParse(Console.ReadLine(), out int rumNr))
-                    {
-                        break;
-                    }
+                    int rumNr = int.Parse(number);
+
                     if (rumNr < 1 || rumNr > 100) // Kollar om rumsnumret är mellan 1 och 100
                     {
                         Console.WriteLine("Rumnumret måste vara mellan 1 och 100, försök igen.");
+
+                        // Fördröjning för att användaren ska hinna läsa meddelandet
                         Thread.Sleep(1000);
                     }
                     else
                     {
-                        // Kollar om rumnumret redan finns på någon lokal
-
+                        // Kollar om rumnumret redan finns på någon befintlig lokal
                         bool salFinns = BokningsManager.Lokaler.OfType<Sal>().Any(r => r.LokalNummer == rumNr); 
                         bool gruppRumFinns = BokningsManager.Lokaler.OfType<Grupprum>().Any(r => r.LokalNummer == rumNr); 
 
@@ -183,29 +185,36 @@ namespace Bokningsapp___Grupp_7
                         }
                         else
                         {
+                            // Sätter rumnumret i propertyn LokalNummer
                             LokalNummer = rumNr;
+
+                            // While-loop för att användaren inte ska komma tillbaka till huvudmenyn om den skriver fel 
                             while (true)
                             {
                                 Console.Clear();
                                 Console.WriteLine($"Skapar {Typ} {LokalNummer}\n\nKapasitet {Typ}: {(Typ == LokalTyp.Grupprum ? "2-20" : "10-200")}\n\nAnge sittplatser:");
                                 string sittplatser = Console.ReadLine();
+                                // Felhantering
                                 if (!int.TryParse(sittplatser, out int capacity))
                                 {
                                     Console.WriteLine("Ogiltigt antal sittplatser. Försök igen.");
                                     Thread.Sleep(1000);
                                     continue;
                                 }
-                                Kapacitet = capacity;
 
-                                if ((Typ == LokalTyp.Grupprum && (Kapacitet < 2 || Kapacitet > 20)) ||
-                                        (Typ == LokalTyp.Sal && (Kapacitet < 10 || Kapacitet > 200)))
+                                // Kollar att input matchar restiktionerna för antal sittplatser
+                                if ((Typ == LokalTyp.Grupprum && (capacity < 2 || capacity > 20)) ||
+                                        (Typ == LokalTyp.Sal && (capacity < 10 || capacity > 200)))
                                 {
                                     Console.Clear();
                                     Console.WriteLine($"Ogiltigt val. Antalet måste vara mellan intervallen: {(Typ == LokalTyp.Grupprum ? "2-20" : "10-200")}.");
                                     Console.ReadKey();                                 
                                 }
                                 else
-                                {
+                                { 
+                                    // Sätter värdet i propertyn Kapacitet
+                                    Kapacitet = capacity;
+
                                     // Skapa en instans av respektive subklass baserat på Typ och skicka med den input vi har fått från användaren
                                     if (Typ == LokalTyp.Sal)
                                     {

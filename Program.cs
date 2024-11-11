@@ -53,7 +53,7 @@ namespace Bokningsapp___Grupp_7
             }
         }
 
-        // Rör ej denna metod
+        // Metod för att skriva ut meny en snygg huvudmeny 
         public void PrintMenu(String[] menuItems)
         {
             String topLeft = "╔";
