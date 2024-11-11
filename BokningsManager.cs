@@ -21,19 +21,19 @@ namespace Bokningsapp___Grupp_7
                 Console.Clear();
                 Console.WriteLine("Tryck 0 för att avbryta.\n");
                 Console.WriteLine("Vilken typ av lokal vill du boka?\n1: Sal\n2: Grupprum");
-                if (!int.TryParse(Console.ReadLine(), out int lokalVal))
+                if (!int.TryParse(Console.ReadLine(), out int lokalVal))                        
                 {
                     Console.WriteLine("Felaktig inmatning. Försök igen.");
                     continue;
                 }
 
-                if (lokalVal == 0)
+                if (lokalVal == 0) 
                 {
                     Lokal.ClearConsole();
                     return;
                 }
 
-                if (lokalVal == 1)
+                if (lokalVal == 1) //kod som skannar all lediga sallar och visar
                 {
                     Console.Clear();
                     Console.WriteLine("Lediga salar:");
@@ -43,16 +43,16 @@ namespace Bokningsapp___Grupp_7
                     }
 
                     Console.WriteLine("\nVilken sal vill du boka?");
-                    if (!int.TryParse(Console.ReadLine(), out int salNr))
+                    if (!int.TryParse(Console.ReadLine(), out int salNr))                 
                     {
                         Console.WriteLine("Felaktig inmatning. Försök igen.");
                         continue;
                     }
 
-                    var sal = Lokaler.OfType<Sal>().FirstOrDefault(s => s.LokalNummer == salNr);
+                    var sal = Lokaler.OfType<Sal>().FirstOrDefault(s => s.LokalNummer == salNr);   // lägger till valda salen på  listan med datumet/tiden som  bokad och namnet på användaren
                     if (sal != null)
                     {
-                        Random randomBokNr = new Random();
+                        Random randomBokNr = new Random();          
 
                         Console.WriteLine("Ange ditt namn: ");
                         sal.BokadAv = Console.ReadLine();
@@ -81,7 +81,7 @@ namespace Bokningsapp___Grupp_7
                             }
                         }
 
-                        try
+                        try                 
                         {
                             sal.StartTid = DateTime.Parse(startTid);
                             sal.Period = TimeSpan.FromHours(period);
@@ -132,7 +132,7 @@ namespace Bokningsapp___Grupp_7
                         Lokal.ClearConsole();
                     }
                 }
-                if (lokalVal == 2)
+                if (lokalVal == 2) //kod som visar up lediga grupprum
                 {
                     Console.Clear();
                     Console.WriteLine("Lediga grupprum:");
@@ -148,7 +148,7 @@ namespace Bokningsapp___Grupp_7
                         continue;
                     }
 
-                    var grupprum = Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == gruppNr);
+                    var grupprum = Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == gruppNr);  // lägger till valda grupprum på  listan med datumet/tiden som  bokad och namnet på användaren
                     if (grupprum != null)
                     {
                         Random randomBokNr = new Random();
@@ -279,10 +279,10 @@ namespace Bokningsapp___Grupp_7
 
                 Lokal.ClearConsole();
             }
-            if (int.TryParse(input, out int year))
+            if (int.TryParse(input, out int year))        
             {
-                Console.Clear();
-                var bookingYear = Bokningar.Where(b => b.StartTid?.Year == year).OrderBy(b => b.StartTid).ToList();
+                
+                Console.Clear();var bookingYear = Bokningar.Where(b => b.StartTid?.Year == year).OrderBy(b => b.StartTid).ToList();
                 if (bookingYear.Count > 0)
                 {
                     foreach (var bokning in bookingYear)
