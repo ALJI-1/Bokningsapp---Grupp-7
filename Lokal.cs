@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Bokningsapp___Grupp_7
 {
@@ -259,6 +261,11 @@ namespace Bokningsapp___Grupp_7
             Console.WriteLine("\nTryck ENTER för att gå vidare.");
             Console.ReadLine();
             Console.Clear();
+        }
+        // En virtuell metod för att skriva ut text i färg. Metoden kan överskridas i subklasserna för att skriva ut text i olika färger.
+        protected virtual void PrintInClolor(string text, ConsoleColor color)
+        {
+
         }
     }
 }

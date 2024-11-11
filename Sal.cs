@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Bokningsapp___Grupp_7
 {
@@ -38,10 +40,18 @@ namespace Bokningsapp___Grupp_7
 
                 BokningsManager.Lokaler.Add(nyttRum); // Lägger till det nya rummet i listan över lokaler
                 Console.Clear();
-                Console.WriteLine("En ny sal har skapats.");
+                PrintInClolor("En ny sal har skapats.", ConsoleColor.Red);
                 BokningsManager.SparaLokaler(); // Sparar lokaler till fil
                 ClearConsole();
             }
+        }
+
+        // överskriden metod för att skriva ut text i färg
+        protected override void PrintInClolor(string text, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
     }    
 }

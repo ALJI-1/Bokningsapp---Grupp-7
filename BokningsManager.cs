@@ -181,7 +181,8 @@ namespace Bokningsapp___Grupp_7
 
                             foreach (var bokning in Bokningar)
                             {
-                                if (grupprum.StartTid < bokning.SlutTid && grupprum.SlutTid > bokning.StartTid)
+                                if (grupprum.StartTid < bokning.SlutTid &&
+                                    grupprum.SlutTid > bokning.StartTid)
                                 {
                                     hasConflict = true;
                                     break;
@@ -313,40 +314,95 @@ namespace Bokningsapp___Grupp_7
             }
         }
 
-        public void UppdateraBokning() // Metod för att uppdatera en bokning
+        public void UppdateraBokning() // Metod för att uppdatera en bokning //RASHIID & CHRISTOFFER
         {
-            Console.Clear();
-            Console.WriteLine("Ange bokningsnummer: ");
-            int.TryParse(Console.ReadLine(), out int bokNr);
-            var bokning = Bokningar.Find(b => b.BokningsNr == bokNr);
-
-            if (bokning != null)
+            while (true)
             {
-                Console.WriteLine("Bokning hittad");
-                Console.WriteLine("Ange nytt startdatum (yyyy-MM-dd): ");
-                string? nyttStartDatum = Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("Tryck 0 för att avbryta.\n");
+                Console.WriteLine("Ange bokningsnummer: ");
+                int.TryParse(Console.ReadLine(), out int bokNr);
+                var nyBokning = Bokningar.Find(b => b.BokningsNr == bokNr);
 
-                Console.WriteLine("Ange ny starttid (HH-mm): ");
-                string? nyStartKlocka = Console.ReadLine();
+                if (bokNr == 0)
+                {
+                    Lokal.ClearConsole();
+                    return;
+                }
+                if (nyBokning != null)
+                {
+                    Console.WriteLine("Bokning hittad");
+                    Console.WriteLine("Ange nytt startdatum (yyyy-MM-dd): ");
+                    string? nyttStartDatum = Console.ReadLine();
 
-                string nyStartTid = $"{nyttStartDatum} {nyStartKlocka}";
+                    Console.WriteLine("Ange ny starttid (HH-mm): ");
+                    string? nyStartKlocka = Console.ReadLine();
 
-                Console.WriteLine("Ange ny varaktighet (timmar): ");
-                string? nyPeriod = Console.ReadLine();
+                    string nyStartTid = $"{nyttStartDatum} {nyStartKlocka}";
 
-                bokning.StartTid = DateTime.Parse(nyStartTid);
-                bokning.Period = TimeSpan.FromHours(double.Parse(nyPeriod));
-                bokning.SlutTid = bokning.StartTid + bokning.Period;
+                    int nyPeriod = 0;
+                    while (true)
+                    {
+                        Console.WriteLine("Hur många timmar (max 8) vill du boka: ");
+                        int.TryParse(Console.ReadLine(), out nyPeriod);
+                        if (nyPeriod > 8)
+                        {
+                            Console.WriteLine("Max 8 timmar kan bokas");
+                            continue;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    try
+                    {
+                        nyBokning.StartTid = DateTime.Parse(nyStartTid);
+                        nyBokning.Period = TimeSpan.FromHours(nyPeriod);
+                        nyBokning.SlutTid = nyBokning.StartTid + nyBokning.Period;
 
-                Console.WriteLine("Bokning uppdaterad");
-                SparaBokningar();
-                Lokal.ClearConsole();
+                        bool hasConflict = false;
+
+                        foreach (var bokningar in Bokningar)
+                        {
+                            if (nyBokning.StartTid > bokningar.SlutTid && nyBokning.SlutTid < bokningar.StartTid)
+                            {
+                                hasConflict = true;
+                                break;
+                            }
+                        }
+                        if (hasConflict)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Den nya bokningen krockar med befintliga bokningar. Försök igen");
+                            Lokal.ClearConsole();
+                        }
+                        else
+                        {
+                            Bokningar.RemoveAll(b => b.BokningsNr == bokNr);
+                            Bokningar.Add(nyBokning);
+                            SparaBokningar();
+                            Console.Clear();
+                            Console.WriteLine($"Bokning uppdaterad.\nDatum: {nyBokning.StartTid:yyyy-MM-dd}");
+                            Console.WriteLine($"Tid: {nyBokning.StartTid:HH:mm} till {nyBokning.SlutTid:HH:mm}");
+                            Lokal.ClearConsole();
+                            return;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Felaktig inmatning. Försök igen.");
+                        Lokal.ClearConsole();
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Bokning hittades inte");
+                    Lokal.ClearConsole();
+                }
             }
-            else
-            {
-                Console.WriteLine("Bokning hittades inte");
-                Lokal.ClearConsole();
-            }
+
         }
         public void AvbrytBokning() // Metod för att avboka en bokning som redan finns 
         {
@@ -451,8 +507,7 @@ namespace Bokningsapp___Grupp_7
                 }
             }
         }
-
-
+        
         public static void SparaLokaler()
         {
             string sparadeLokaler = JsonSerializer.Serialize(Lokaler);
