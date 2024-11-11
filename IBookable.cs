@@ -13,6 +13,7 @@ namespace Bokningsapp___Grupp_7
         public String? BokadAv { get; set; }
         public int LokalNummer { get; set; }
         public int Kapacitet { get; set; }
+        public int BokningsNr { get; set; }
 
 
         // Deklarerar metoder som ska implementeras i klasser som implementerar interfacet. Ingen logik här
