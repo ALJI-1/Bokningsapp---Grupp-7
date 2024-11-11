@@ -29,7 +29,7 @@ namespace Bokningsapp___Grupp_7
                         bokningsManager.SkapaBokning();
                         break;
                     case "2":
-                        bokningsManager.VisaBokningar();
+                        BokningsManager.VisaBokningar();
                         break;
                     case "3":
                         bokningsManager.AvbrytBokning();

@@ -21,7 +21,11 @@ namespace Bokningsapp___Grupp_7
                 Console.Clear();
                 Console.WriteLine("Tryck 0 för att avbryta.\n");
                 Console.WriteLine("Vilken typ av lokal vill du boka?\n1: Sal\n2: Grupprum");
-                int.TryParse(Console.ReadLine(), out int lokalVal);
+                if (!int.TryParse(Console.ReadLine(), out int lokalVal))
+                {
+                    Console.WriteLine("Felaktig inmatning. Försök igen.");
+                    continue;
+                }
 
                 if (lokalVal == 0)
                 {
@@ -39,7 +43,11 @@ namespace Bokningsapp___Grupp_7
                     }
 
                     Console.WriteLine("\nVilken sal vill du boka?");
-                    int.TryParse(Console.ReadLine(), out int salNr);
+                    if (!int.TryParse(Console.ReadLine(), out int salNr))
+                    {
+                        Console.WriteLine("Felaktig inmatning. Försök igen.");
+                        continue;
+                    }
 
                     var sal = BokningsManager.Lokaler.OfType<Sal>().FirstOrDefault(s => s.LokalNummer == salNr);
                     if (sal != null)
@@ -112,7 +120,11 @@ namespace Bokningsapp___Grupp_7
                     }
 
                     Console.WriteLine("\nVilket grupprum vill du boka?");
-                    int.TryParse(Console.ReadLine(), out int salNr);
+                    if (!int.TryParse(Console.ReadLine(), out int salNr))
+                    {
+                        Console.WriteLine("Felaktig inmatning. Försök igen.");
+                        continue;
+                    }
 
                     var grupprum = BokningsManager.Lokaler.OfType<Grupprum>().FirstOrDefault(s => s.LokalNummer == salNr);
                     if (grupprum != null)
@@ -173,7 +185,7 @@ namespace Bokningsapp___Grupp_7
             }
         }
 
-        public void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit // Rashid, Albin 
+        public static void VisaBokningar() // Metod för att visa de bokningar som finns och de bokningar som har varit // Rashid, Albin 
         {
             // Kollar om det finns några bokningar
             if (BokningsManager.Bokningar.Count == 0)
@@ -306,10 +318,13 @@ namespace Bokningsapp___Grupp_7
             Lokaler.Clear();
             foreach (var item in jsonList)
             {
-                if (item["Typ"]?.ToString() == "1")
-                    Lokaler.Add(item.Deserialize<Sal>());
-                else if (item["Typ"]?.ToString() == "0")
-                    Lokaler.Add(item.Deserialize<Grupprum>());
+                if (item != null)
+                {
+                    if (item["Typ"]?.ToString() == "1")
+                        Lokaler.Add(item.Deserialize<Sal>());
+                    else if (item["Typ"]?.ToString() == "0")
+                        Lokaler.Add(item.Deserialize<Grupprum>());
+                }
             }
         }
 
@@ -331,22 +346,33 @@ namespace Bokningsapp___Grupp_7
 
                 var bokadAv = item["BokadAv"]?.ToString();
                 var bokningsNr = item["BokningsNr"]?.GetValue<int>();
-                var lokalTyp = (LokalTyp)Enum.Parse(typeof(LokalTyp), item["Typ"]?.ToString());
                 var lokalNummer = item["LokalNummer"]?.GetValue<int>();
+                var typeValue = item["Typ"]?.ToString();
 
-                if (startTid.HasValue && slutTid.HasValue && period.HasValue && bokadAv != null && bokningsNr.HasValue && lokalNummer.HasValue)
+                // Kollar så att användaren skrivit in rätt typ av lokal
+                if (typeValue != null)
                 {
-                    var lokal = new Lokal
+                    var lokalTyp = (LokalTyp)Enum.Parse(typeof(LokalTyp), typeValue);
+
+                    if (startTid.HasValue && slutTid.HasValue && period.HasValue && bokadAv != null && bokningsNr.HasValue && lokalNummer.HasValue)
                     {
-                        StartTid = startTid.Value,
-                        SlutTid = slutTid.Value,
-                        Period = period.Value,
-                        BokadAv = bokadAv,
-                        BokningsNr = bokningsNr.Value,
-                        Typ = lokalTyp,
-                        LokalNummer = lokalNummer.Value
-                    };
-                    Bokningar.Add(lokal);
+                        var lokal = new Lokal
+                        {
+                            StartTid = startTid.Value,
+                            SlutTid = slutTid.Value,
+                            Period = period.Value,
+                            BokadAv = bokadAv,
+                            BokningsNr = bokningsNr.Value,
+                            Typ = lokalTyp,
+                            LokalNummer = lokalNummer.Value
+                        };
+                        Bokningar.Add(lokal);
+                    }
+                }
+                else
+                {
+                    // Skapar en ecxeption om typen inte finns
+                    throw new InvalidOperationException("Typen finns inte i JSON.");
                 }
             }
         }

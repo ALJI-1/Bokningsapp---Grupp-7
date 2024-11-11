@@ -131,13 +131,16 @@ namespace Bokningsapp___Grupp_7
             ClearConsole();
         }
         // SkapaNyLokal - Christoffer och Albin
-        public virtual void SkapaNyLokal()
+        public void SkapaNyLokal()
         {
             do
             {
                 Console.Clear();
                 Console.WriteLine("----- Skapa ny lokal ------\n\nAnge typ av lokal:\n\n1. för Sal\n2. för Grupprum\n\nValfri knapp för att gå tillbaka");
-                int.TryParse(Console.ReadLine(), out int input);
+                if (!int.TryParse(Console.ReadLine(), out int input))
+                {
+                    break;
+                }
                 if (input == 1)
                 {
                     Typ = LokalTyp.Sal;
@@ -156,10 +159,10 @@ namespace Bokningsapp___Grupp_7
                     Console.Clear();
                     Console.WriteLine("Ange lokalnummer:");
                     string number = Console.ReadLine();
-                    int.TryParse(number, out int rumNr);
-
-                    //LokalNummer = int.Parse(Console.ReadLine());
-
+                    if (!int.TryParse(Console.ReadLine(), out int rumNr))
+                    {
+                        break;
+                    }
                     if (rumNr < 1 || rumNr > 100) // Kollar om rumsnumret är mellan 1 och 100
                     {
                         Console.WriteLine("Rumnumret måste vara mellan 1 och 100, försök igen.");
@@ -185,8 +188,12 @@ namespace Bokningsapp___Grupp_7
                                 Console.Clear();
                                 Console.WriteLine($"Skapar {Typ} {LokalNummer}\n\nKapasitet {Typ}: {(Typ == LokalTyp.Grupprum ? "2-20" : "10-200")}\n\nAnge sittplatser:");
                                 string sittplatser = Console.ReadLine();
-                                int.TryParse(sittplatser, out int capacity);
-
+                                if (!int.TryParse(sittplatser, out int capacity))
+                                {
+                                    Console.WriteLine("Ogiltigt antal sittplatser. Försök igen.");
+                                    Thread.Sleep(1000);
+                                    continue;
+                                }
                                 Kapacitet = capacity;
 
                                 if ((Typ == LokalTyp.Grupprum && (Kapacitet < 2 || Kapacitet > 20)) ||
