@@ -373,7 +373,7 @@ namespace Bokningsapp___Grupp_7
                         // Kontrollerar om den nya bokningen krockar med någon annan bokning
                         foreach (var bokningar in Bokningar)
                         {
-                            if (nyBokning.StartTid > bokningar.SlutTid && nyBokning.SlutTid < bokningar.StartTid)
+                            if (nyBokning.StartTid < bokningar.SlutTid && nyBokning.SlutTid > bokningar.StartTid)
                             {
                                 hasConflict = true;
                                 break;

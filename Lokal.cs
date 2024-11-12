@@ -266,7 +266,9 @@ namespace Bokningsapp___Grupp_7
         // En virtuell metod för att skriva ut text i färg. Metoden kan överskridas i subklasserna för att skriva ut text i olika färger.
         protected virtual void PrintInClolor(string text, ConsoleColor color)
         {
-
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
         }
     }
 }
