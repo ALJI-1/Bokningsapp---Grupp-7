@@ -373,7 +373,7 @@ namespace Bokningsapp___Grupp_7
                         // Kontrollerar om den nya bokningen krockar med någon annan bokning
                         foreach (var bokningar in Bokningar)
                         {
-                            if (nyBokning.StartTid < bokningar.SlutTid && nyBokning.SlutTid > bokningar.StartTid)
+                            if (bokningar.BokningsNr != nyBokning.BokningsNr && nyBokning.StartTid < bokningar.SlutTid && nyBokning.SlutTid > bokningar.StartTid)
                             {
                                 hasConflict = true;
                                 break;
@@ -403,7 +403,6 @@ namespace Bokningsapp___Grupp_7
                         Console.WriteLine("Felaktig inmatning. Försök igen.");
                         Lokal.ClearConsole();
                     }
-
                 }
                 else
                 {
@@ -411,7 +410,6 @@ namespace Bokningsapp___Grupp_7
                     Lokal.ClearConsole();
                 }
             }
-
         }
         public void AvbrytBokning() // Metod för att avboka en bokning som redan finns 
         {
